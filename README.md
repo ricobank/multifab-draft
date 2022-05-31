@@ -1,13 +1,12 @@
 
 `multifab` is an object that constructs new contracts by copying
-code from existing contracts with `EXTCODECOPY`. This is useful
-for us because right now vyper doesn't have a way to use `CREATE`
-directly, and we want to use that opcode in particular.
+code from existing contracts with `EXTCODECOPY`. It is inspired
+by [an old idea](https://github.com/nexusdev/the-factory), now
+motivated by a real use case: Vyper doesn't have factories!
 
 It might also end up being more useful overall because this way we
 can log info about the constructor arguments and so on. Finally
-we might be able to get some gas savings for typical deployment
-cases.
+we might be able to get some gas savings for some deployment cases.
 
 Here is some pseudocode, we could probably use yul or raw bytecode:
 
