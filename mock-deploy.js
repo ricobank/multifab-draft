@@ -1,6 +1,5 @@
 const fs = require('fs')
 const dpack = require('@etherpacks/dpack')
-const { b32, send } = require("minihat");
 
 task('multifab-mock-deploy', async (args, hh)=> {
     const packdir = args.packdir ?? './pack/'

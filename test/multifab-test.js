@@ -1,8 +1,7 @@
-// const Buffer = require('node:buffer')
 const dpack = require('@etherpacks/dpack')
 const hh = require('hardhat')
 const ethers = hh.ethers
-const { b32, fail, hear, revert, send, snapshot, wait, want } = require('minihat')
+const { revert, send, snapshot, want } = require('minihat')
 
 describe('multifab', ()=>{
     let multifab
@@ -22,12 +21,9 @@ describe('multifab', ()=>{
         const dapp = await dpack.load(pack, hh.ethers, ali)
         multifab = dapp.multifab
 
-        const person_type = await ethers.getContractFactory('Person', ali)
-        const blah = ethers.utils.defaultAbiCoder.encode([ "bytes", "bytes", "uint256" ], [ name, last, year ])
-
-        // TODO add events
-        personhash = await multifab.callStatic.cache(person_type.bytecode, blah)
-        await send(multifab.cache, person_type.bytecode, blah)
+        const person_factory = await ethers.getContractFactory('Person', ali)
+        const receipt = await send(multifab.cache, person_factory.bytecode);
+        [, personhash] = receipt.events.find(event => event.event === 'Added').args
 
         await snapshot(hh)
     })
@@ -36,11 +32,18 @@ describe('multifab', ()=>{
         await revert(hh)
     })
 
-    it('build', async () => {
+    it('instance gets correct constructor args', async () => {
         const args = ethers.utils.defaultAbiCoder.encode([ "bytes", "bytes", "uint256" ], [ name, last, year ])
-        // TODO add events
-        const address1 = await multifab.callStatic.build(personhash, args)
-        await send(multifab.build, personhash, args)
-        console.log(address1)
+        const receipt = await send(multifab.build, personhash, args)
+        const [, dan_addr, ] = receipt.events.find(event => event.event === 'Built').args
+        const person_type = await hh.artifacts.readArtifact('Person')
+        const dan = new ethers.Contract(dan_addr, person_type.abi, ali)
+        const res_name = await dan.name()
+        const res_last = await dan.last()
+        const res_year = await dan.year()
+
+        want(res_name).to.eql('0x' + name.toString('hex'))
+        want(res_last).to.eql('0x' + last.toString('hex'))
+        want(res_year).to.eql(ethers.BigNumber.from(year))
     })
 })
