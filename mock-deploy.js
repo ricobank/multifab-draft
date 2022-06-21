@@ -22,7 +22,7 @@ task('multifab-mock-deploy', async (args, hh)=> {
     const show =(o)=> JSON.stringify(o, null, 2)
 
     fs.writeFileSync(packdir + `Multifab.json`, show(multifab_type))
-    fs.writeFileSync(packdir + `multifab_full_${hh.network.name}.dpack.json`, show(pack))
+    fs.writeFileSync(packdir + `multifab_${hh.network.name}.dpack.json`, show(pack))
 
     return pack
 })
