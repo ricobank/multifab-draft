@@ -9,7 +9,7 @@
     "@etherpacks/dpack": "^0.0.29",
     "@nomiclabs/hardhat-ethers": "2.0.6",
     "@types/mocha": "^9.0.0",
-    "hardhat": "2.9.4",
+    "hardhat": "^2.10.0",
     "minihat": "^0.0.6"
   }
 }
