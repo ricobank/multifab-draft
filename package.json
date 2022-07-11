@@ -7,7 +7,7 @@
   },
   "devDependencies": {
     "@etherpacks/dpack": "^0.0.29",
-    "@nomiclabs/hardhat-ethers": "2.0.6",
+    "@nomiclabs/hardhat-ethers": "^2.1.0",
     "@types/mocha": "^9.0.0",
     "hardhat": "^2.10.0",
     "minihat": "^0.0.6"
